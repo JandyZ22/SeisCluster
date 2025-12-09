@@ -1,5 +1,6 @@
 from .function import *
 from collections import Counter
+import shutil
 
 def autonb(stream, sacflst,datapath):
     """
@@ -62,6 +63,32 @@ def check_data(datapath,suffix):
     """
     sacflst = getflst(datapath)
     st = read_sac_files(datapath, sacflst,suffix)
+    # check Amplitude
+    Amp_threshold = 3
+    max_amps = np.array([np.max(np.abs(tr.data)) for tr in st])
+    ref_amp = np.median(max_amps)  # 用中位数
+    bad_idx = np.where(
+    (max_amps > ref_amp * 10**Amp_threshold) |
+    (max_amps < ref_amp / 10**Amp_threshold)
+)[0]
+
+    if len(bad_idx) > 0:
+        parent_2_dir =  os.path.dirname(os.path.dirname(datapath))
+        bad_dir = os.path.join(parent_2_dir, "BAD_Amplitude")
+        if not os.path.exists(bad_dir):
+            os.makedirs(bad_dir, exist_ok=True)
+
+        print(f"Found {len(bad_idx)} abnormal traces ( > or < 10^{Amp_threshold} orders):")
+        for idx in sorted(bad_idx, reverse=True):
+            bad_file = sacflst[idx]
+            src = os.path.join(datapath, bad_file)
+            dst = os.path.join(bad_dir, bad_file)
+            shutil.move(src, dst)
+            st.remove(st[idx])
+            sacflst.pop(idx)
+
+        print("Abnormal Amplitude data moved to BAD_Amplitude")
+
     # check delta
     tolerance = 1e-6  # 设置一个容差范围
     delta_ref = st[0].stats.delta #
