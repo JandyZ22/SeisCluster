@@ -6,7 +6,7 @@ SeisCluster is a python package for waveform auto-identification using hierarchi
 
 For the use of the SeisCluster package, please cite as：
 
-- Yandi Zeng, Xinlei Sun, Tao Yang, Haonan Chen, Hierarchical clustering using seismic waveform information: a strategy for automatic waveform identification, Geophysical Journal International, Volume 244, Issue 1, January 2026, ggaf437, https://doi.org/10.1093/gji/ggaf437
+- Yandi Zeng, Xinlei Sun, Tao Yang, Haonan Chen, Hierarchical clustering using seismic waveform information: a strategy for automatic waveform identification, *Geophysical Journal International*, Volume 244, Issue 1, January 2026, ggaf437, https://doi.org/10.1093/gji/ggaf437
 
 ## Installation
 
